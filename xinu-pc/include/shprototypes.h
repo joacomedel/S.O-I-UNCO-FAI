@@ -76,5 +76,8 @@ extern	shellcmd  xsh_uptime	(int32, char *[]);
 /* in file xsh_help.c */
 extern	shellcmd  xsh_help	(int32, char *[]);
 
-/* in file programa.c */
+/* in file mi_programa.c */
 extern	shellcmd  mi_programa	(int32, char *[]);
+
+/* in file mi_ahorcado.c */
+extern	shellcmd  mi_ahorcado	(int32, char *[]);

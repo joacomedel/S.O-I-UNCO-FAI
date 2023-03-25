@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <tty.h>
 
 int mi_ahorcado() {
 
@@ -18,7 +17,7 @@ int mi_ahorcado() {
 
 	/* Decirle al sistema que el modo input es RAW */
 	//system ("/bin/stty raw");
-    control(CONSOLE,ttyhandle_in)
+    //control(CONSOLE,ttyhandle_in)
 
 
 	while(1) {
