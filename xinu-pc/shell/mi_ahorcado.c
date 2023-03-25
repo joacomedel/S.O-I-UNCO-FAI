@@ -9,7 +9,8 @@ int mi_ahorcado() {
 	char cadenaBuscar[] = {"hola"};
 	int32 r = 1;
 	char cadenaTemp[] = {"____"};
-	int32 intento = 8;
+	int32 longCadena = strlen(cadenaBuscar);
+	int32 intento = longCadena;
 	bool encontro = false;
 	int32 aciertos = 0;
 
@@ -17,7 +18,7 @@ int mi_ahorcado() {
 
 	/* Decirle al sistema que el modo input es RAW */
 	//system ("/bin/stty raw");
-    //control(CONSOLE,ttyhandle_in)
+    control(CONSOLE,TC_MODER,0,0);
 
 
 	while(1) {
@@ -44,7 +45,7 @@ int mi_ahorcado() {
 			
 			break;
 		}
-        if(aciertos == strlen(cadenaBuscar)){
+        if(aciertos == longCadena){
 			printf("\n Ganaste : la palabra era %s \n \n ",cadenaBuscar);
             break;
 		}
@@ -54,6 +55,6 @@ int mi_ahorcado() {
 		}
 		
 	}
-    
+    control(CONSOLE,TC_MODEC,0,0);
 	//system ("/bin/stty sane erase ^H");
 }
