@@ -1,18 +1,16 @@
 #include <xinu.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stdlib.h>
 
-int mi_ahorcado()
+
+shellcmd  mi_ahorcado	(int32 n, char *param[] )
 {
-
 	int32 c;
-	char cadenaBuscar[] = {"hola"};
+	
+	char cadenaBuscar[] = "hola";
 	int32 r = 1;
 	char cadenaTemp[] = {"____"};
 	int32 longCadena = strlen(cadenaBuscar);
 	int32 intento = longCadena;
-	bool encontro = false;
+	int encontro = 0;
 	int32 aciertos = 0;
 
 	/* Decirle al sistema que el modo input es RAW */
@@ -31,22 +29,20 @@ int mi_ahorcado()
 			{
 				cadenaTemp[i] = cadenaBuscar[i];
 				aciertos = aciertos + 1;
-				encontro = true;
+				encontro = 1;
 			}
 		}
 
-		if (!encontro)
+		if (encontro == 0)
 		{
 			intento = intento - 1;
 		}
 		else
 		{
-			encontro = false;
+			encontro = 0;
 		}
-
 		if (c == '0')
 		{
-
 			break;
 		}
 		if (aciertos == longCadena)
