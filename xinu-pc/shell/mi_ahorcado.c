@@ -5,9 +5,9 @@ shellcmd  mi_ahorcado	(int32 n, char *param[] )
 {
 	int32 c;
 	
-	char cadenaBuscar[] = "hola";
+	char cadenaBuscar[] = "ahora";
 	int32 r = 1;
-	char cadenaTemp[] = {"____"};
+	char cadenaTemp[] = {"_____"};  //CadenaTemp tiene q tener la misma cantidad de caracteres q cadenaBuscar 
 	int32 longCadena = strlen(cadenaBuscar);
 	int32 intento = longCadena;
 	int encontro = 0;
