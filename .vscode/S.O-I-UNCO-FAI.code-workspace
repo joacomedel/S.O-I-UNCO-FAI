@@ -8,16 +8,5 @@
 		"files.associations": {
 			"kernel.h": "c"
 		}
-	},
-	"launch": {
-		"version": "0.2.0",
-		"configurations": [
-			{
-				"name": "F5 Anything: Custom Command",
-				"type": "f5anything",
-				"request": "launch",
-				"command": "make run-qemu --directory ./xinu-pc/compile/"
-			}
-		]
 	}
 }

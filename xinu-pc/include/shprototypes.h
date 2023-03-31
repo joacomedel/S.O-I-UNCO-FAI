@@ -81,3 +81,6 @@ extern	shellcmd  mi_programa	(int32, char *[]);
 
 /* in file mi_ahorcado.c */
 extern	shellcmd  mi_ahorcado	(int32, char *[]);
+
+/* in file mi_ejPrioridad.c */
+extern	shellcmd  mi_ejPrioridad	(int32, char *[]);

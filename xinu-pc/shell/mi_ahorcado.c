@@ -1,17 +1,15 @@
 #include <xinu.h>
 
-
-shellcmd  mi_ahorcado	(int32 n, char *param[] )
+shellcmd mi_ahorcado(int32 n, char *param[])
 {
 	int32 c;
-	
-	char cadenaBuscar[] = "ahora";
-	int32 r = 1;
-	char cadenaTemp[] = {"_____"};  //CadenaTemp tiene q tener la misma cantidad de caracteres q cadenaBuscar 
+
+	char cadenaBuscar[] = "ahora"; // Palabra a buscar , si se edita , hay q editar cadenaTemp
+	char cadenaTemp[] = {"_____"}; // CadenaTemp tiene q tener la misma cantidad de caracteres q cadenaBuscar
 	int32 longCadena = strlen(cadenaBuscar);
 	int32 intento = longCadena;
-	int encontro = 0;
-	int32 aciertos = 0;
+	int32 aciertos = 0; //contador para saber la cantidad de aciertos
+	int32 letraEncontrada = 0; //boolean para ver si se encontro una letra
 
 	/* Decirle al sistema que el modo input es RAW */
 	// system ("/bin/stty raw");
@@ -19,28 +17,31 @@ shellcmd  mi_ahorcado	(int32 n, char *param[] )
 
 	while (1)
 	{
+		letraEncontrada = 0;
 		printf("\r                                                          ");
 
 		printf("\r %s   : ingrese una letra, quedan %d intentos . (0 para salir): ", cadenaTemp, intento);
 		c = getchar();
+		
+
 		for (int i = 0; i < strlen(cadenaBuscar); i++)
 		{
-			if (cadenaTemp[i] == '_' && cadenaBuscar[i] == c)
+			if (cadenaBuscar[i] == c)
 			{
-				cadenaTemp[i] = cadenaBuscar[i];
-				aciertos = aciertos + 1;
-				encontro = 1;
+				if (cadenaTemp[i] == '_')
+				{
+					cadenaTemp[i] = cadenaBuscar[i];
+					aciertos = aciertos + 1;
+				}
+				letraEncontrada = 1;
 			}
 		}
 
-		if (encontro == 0)
+		if (letraEncontrada == 0) // Si no se encontró la letra
 		{
 			intento = intento - 1;
 		}
-		else
-		{
-			encontro = 0;
-		}
+
 		if (c == '0')
 		{
 			break;

@@ -3,8 +3,9 @@
         {
             "name": "Xinu",
             "includePath": [
+                "${workspaceFolder}/xinu-pc/include",
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/xinu-pc/include"
+                "${workspaceFolder}/xinu-pc/config"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

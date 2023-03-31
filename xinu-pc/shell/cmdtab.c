@@ -29,7 +29,8 @@ const	struct	cmdent	cmdtab[] = {
 	{"uptime",	FALSE,	xsh_uptime},
 	{"?",		FALSE,	xsh_help},
 	{"programa",FALSE, mi_programa},
-	{"ahorcado",FALSE, mi_ahorcado}
+	{"ahorcado",FALSE, mi_ahorcado},
+	{"ejPrioridad",FALSE, mi_ejPrioridad}
 
 };
 
