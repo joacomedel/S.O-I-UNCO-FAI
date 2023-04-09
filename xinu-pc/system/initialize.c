@@ -257,3 +257,7 @@ int32	delay(int n)
 	DELAY(n);
 	return OK;
 }
+
+
+//
+struct	sentry	semtab[NSEM];
