@@ -259,5 +259,6 @@ int32	delay(int n)
 }
 
 
-//
-struct	sentry	semtab[NSEM];
+//Propios 
+struct	mtx	mtxtab[NMTX];
+//Se podria recorrer el arreglo de mtx , para setear los valores por default , como hace xinu

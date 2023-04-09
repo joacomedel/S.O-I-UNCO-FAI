@@ -31,7 +31,8 @@ const	struct	cmdent	cmdtab[] = {
 	{"programa",FALSE, mi_programa},
 	{"ahorcado",FALSE, mi_ahorcado},
 	{"ejPrioridad",FALSE, mi_ejPrioridad},
-	{"productorConsumidor",FALSE,mi_prodConsm}
+	{"productorConsumidor",FALSE,mi_prodConsm},
+	{"mutex",FALSE,prueba_mutex}
 
 };
 
