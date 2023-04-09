@@ -12,7 +12,7 @@ mtx32 mutex_init()
         struct mtx mtxStruct;
         mtxStruct.mutexId = ind;
         mtxid = mtxStruct.mutexId;
-        mtxStruct.semId = semcreate(0);
+        mtxStruct.semId = semcreate(1);
         mtxStruct.pid = 0;
         mtxtab[ind] = mtxStruct;
         ind++;
