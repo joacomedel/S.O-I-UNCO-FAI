@@ -84,3 +84,7 @@ extern	shellcmd  mi_ahorcado	(int32, char *[]);
 
 /* in file mi_ejPrioridad.c */
 extern	shellcmd  mi_ejPrioridad	(int32, char *[]);
+
+extern shellcmd mi_prodConsm (int32 , char *[]);
+
+extern shellcmd prueba_mutex (int32 , char *[]);

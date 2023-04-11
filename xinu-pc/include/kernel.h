@@ -71,3 +71,8 @@ extern	qid16	readylist;	/* global ID for list of ready processes*/
 syscall	kprintf(char *fmt, ...);
 syscall	kputc(byte);
 syscall	kgetc(void);
+
+
+//definiciones de tipos mias 
+
+typedef	int32 mtx32;

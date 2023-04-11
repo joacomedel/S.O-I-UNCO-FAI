@@ -1,7 +1,7 @@
 #include <xinu.h>
 void repetirC(char);
 
-mi_programa() {
+shellcmd mi_programa() {
 int32 pidA = 0;
 int32 pidB = 0;
 printf("Inicio programa 1 repetidamente va a imprimir A\n");

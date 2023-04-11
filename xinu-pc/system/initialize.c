@@ -257,3 +257,8 @@ int32	delay(int n)
 	DELAY(n);
 	return OK;
 }
+
+
+//Propios 
+struct	mtx	mtxtab[NMTX];
+//Se podria recorrer el arreglo de mtx , para setear los valores por default , como hace xinu

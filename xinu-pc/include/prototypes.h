@@ -652,3 +652,6 @@ extern	syscall	yield(void);
 /* Mis metodos */
 
 extern devcall high_level_scheduler (int32,int32,int32,int32,int32,int32);
+extern mtx32  mutex_init();
+extern devcall mutex_lock ();
+extern devcall mutex_unlock ();

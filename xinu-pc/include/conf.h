@@ -91,3 +91,4 @@ extern	struct	dentry	devtab[]; /* one entry per device */
 #define	ETHER0	0
 #endif
 
+#define	NMTX	     10	/* number of mutex			*/

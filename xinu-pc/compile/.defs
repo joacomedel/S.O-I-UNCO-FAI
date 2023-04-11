@@ -32,7 +32,8 @@ SYSTEM_CFILES =                                                                 
 	initialize.c            insert.c                insertd.c               \
 	ioerr.c                 ionull.c                kill.c                  \
 	kprintf.c               main.c                  mark.c                  \
-	meminit.c               mkbufpool.c             newqueue.c              \
+	meminit.c               mkbufpool.c             mutex_init.c            \
+	mutex_lock.c            mutex_unlock.c          newqueue.c              \
 	open.c                  panic.c                 pci.c                   \
 	ptclear.c               ptcount.c               ptcreate.c              \
 	ptdelete.c              ptinit.c                ptrecv.c                \
@@ -278,12 +279,13 @@ SRC_CFULL  += ${NET_CFULL}
 
 SHELL_CFILES =                                                                  \
 	addargs.c         cmdtab.c          lexan.c           mi_ahorcado.c     \
-	mi_ejPrioridad.c  mi_programa.c     mouse.c           shell.c           \
-	xsh_argecho.c     xsh_arp.c         xsh_cat.c         xsh_clear.c       \
-	xsh_date.c        xsh_devdump.c     xsh_echo.c        xsh_exit.c        \
-	xsh_help.c        xsh_kill.c        xsh_memdump.c     xsh_memstat.c     \
-	xsh_netinfo.c     xsh_ping.c        xsh_ps.c          xsh_sleep.c       \
-	xsh_udpdump.c     xsh_udpecho.c     xsh_udpserver.c   xsh_uptime.c    
+	mi_ejPrioridad.c  mi_prodConsm.c    mi_programa.c     mouse.c           \
+	prueba_mutex.c    shell.c           xsh_argecho.c     xsh_arp.c         \
+	xsh_cat.c         xsh_clear.c       xsh_date.c        xsh_devdump.c     \
+	xsh_echo.c        xsh_exit.c        xsh_help.c        xsh_kill.c        \
+	xsh_memdump.c     xsh_memstat.c     xsh_netinfo.c     xsh_ping.c        \
+	xsh_ps.c          xsh_sleep.c       xsh_udpdump.c     xsh_udpecho.c     \
+	xsh_udpserver.c   xsh_uptime.c    
 
 SRC_CFILES  += ${SHELL_CFILES}
 SHELL_CFULL += ${SHELL_CFILES:%=../shell/%}
@@ -391,6 +393,12 @@ binaries/meminit.o:               ../system/meminit.c
 	${CC} ${CFLAGS} -o binaries/meminit.o ../system/meminit.c
 binaries/mkbufpool.o:             ../system/mkbufpool.c
 	${CC} ${CFLAGS} -o binaries/mkbufpool.o ../system/mkbufpool.c
+binaries/mutex_init.o:            ../system/mutex_init.c
+	${CC} ${CFLAGS} -o binaries/mutex_init.o ../system/mutex_init.c
+binaries/mutex_lock.o:            ../system/mutex_lock.c
+	${CC} ${CFLAGS} -o binaries/mutex_lock.o ../system/mutex_lock.c
+binaries/mutex_unlock.o:          ../system/mutex_unlock.c
+	${CC} ${CFLAGS} -o binaries/mutex_unlock.o ../system/mutex_unlock.c
 binaries/newqueue.o:              ../system/newqueue.c
 	${CC} ${CFLAGS} -o binaries/newqueue.o ../system/newqueue.c
 binaries/open.o:                  ../system/open.c
@@ -828,10 +836,14 @@ binaries/mi_ahorcado.o:           ../shell/mi_ahorcado.c
 	${CC} ${CFLAGS} -o binaries/mi_ahorcado.o ../shell/mi_ahorcado.c
 binaries/mi_ejPrioridad.o:        ../shell/mi_ejPrioridad.c
 	${CC} ${CFLAGS} -o binaries/mi_ejPrioridad.o ../shell/mi_ejPrioridad.c
+binaries/mi_prodConsm.o:          ../shell/mi_prodConsm.c
+	${CC} ${CFLAGS} -o binaries/mi_prodConsm.o ../shell/mi_prodConsm.c
 binaries/mi_programa.o:           ../shell/mi_programa.c
 	${CC} ${CFLAGS} -o binaries/mi_programa.o ../shell/mi_programa.c
 binaries/mouse.o:                 ../shell/mouse.c
 	${CC} ${CFLAGS} -o binaries/mouse.o ../shell/mouse.c
+binaries/prueba_mutex.o:          ../shell/prueba_mutex.c
+	${CC} ${CFLAGS} -o binaries/prueba_mutex.o ../shell/prueba_mutex.c
 binaries/shell.o:                 ../shell/shell.c
 	${CC} ${CFLAGS} -o binaries/shell.o ../shell/shell.c
 binaries/xsh_argecho.o:           ../shell/xsh_argecho.c
