@@ -24,7 +24,7 @@
                    }
 
                    if ( primo ){
-                           printf( "%d \n", i );
+                           //printf( "%d \n", i );
                         total++;
                         }
           }
