@@ -1,0 +1,9 @@
+gcc significa , GNU compiler collection 
+es un conjunto de compiladores de codigo abierto 
+utilizados para generar ejecutables de varios
+lenguajes de programacion como : c , C++ ....
+
+Posix : es un conjunto de estandares que definen
+una interfaz de SO para unix 
+Fueron desarollado para promover portabilidad entre 
+SO tipo unix
