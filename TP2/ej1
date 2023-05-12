@@ -1,0 +1,6 @@
+El planificador de procesos de xinu , el proceso con mas prioridad es siempre ejecutado , en el caso de que hayan mas de un proceso con misma priodad maxima , se ejecuta un sistema roundrobin con esos procesos
+
+Lo que ocurre es q cuando cambiamos la prioridad se deja de ejecutar el planificador entonces no puede dormir el proceso bien 
+
+
+2) El programa no anda como debe ya dos procesos intenan acceder a la misma variable generando incosistencias 
