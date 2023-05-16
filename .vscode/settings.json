@@ -1,1 +1,8 @@
-{}
+{
+    "files.associations": {
+        "xinu.h": "c",
+        "*.tcc": "c",
+        "cstdio": "c",
+        "keyboard.h": "c"
+    }
+}
