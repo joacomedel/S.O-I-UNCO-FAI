@@ -5,9 +5,15 @@
 
 unsigned char kblayout [128];  // { ... } Fill your layout yourself 
 
+struct StBuffer stbuffer;
+
+sid32 semKbd;
+pid32 pidKbd;
 
 void keyboard_wait(byte a_type) //unsigned char
 {
+
+
   int _time_out=100000; //unsigned int
   if(a_type==0)
   {
@@ -33,9 +39,6 @@ void keyboard_wait(byte a_type) //unsigned char
   }
 }
 
-
-
-
 /*------------------------------------------------------------------------
  *  kbdinit  -  Initialize the ps/2 keyboard
  *------------------------------------------------------------------------
@@ -44,6 +47,13 @@ devcall	kbdinit (
 	  struct dentry	*devptr		/* Entry in device switch table	*/
 	)
 {
+	
+	semKbd = semcreate(1);
+	pidKbd = -1;
+	stbuffer.semInBf = semcreate(0);
+	//stbuffer.semBin = semcreate(1);
+	stbuffer.index = 0;
+	stbuffer.finIndex = 0;
 
 	int i;
 	for (i=0; i<128; i++)

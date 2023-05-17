@@ -1,1 +1,6 @@
-{}
+{
+    "files.associations": {
+        "keyboard.h": "c",
+        "mouse.h": "c"
+    }
+}

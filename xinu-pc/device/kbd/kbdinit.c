@@ -5,9 +5,11 @@
 
 unsigned char kblayout [128];  // { ... } Fill your layout yourself 
 
-
 void keyboard_wait(byte a_type) //unsigned char
 {
+	semKbd = semcreate(1);
+
+
   int _time_out=100000; //unsigned int
   if(a_type==0)
   {

@@ -1,6 +1,7 @@
 /* kbdopen.c  -  kbdopen */
 
 #include <xinu.h>
+#include <keyboard.h>
 
 /*------------------------------------------------------------------------
  * kbdopen  -  Open the ps/2 keyboard device
@@ -14,6 +15,9 @@ devcall	kbdopen (
 	)
 {
 	/* No action -- just return the device descriptor */
+	wait(semKbd);
+	semKbd = getpid();
+
 
 	return devptr->dvnum;
 }

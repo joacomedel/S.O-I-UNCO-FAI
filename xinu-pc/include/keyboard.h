@@ -5,6 +5,7 @@
 #define KEYBOARD_DATAREG 0x60  // :Data Register(Read\Write)
 #define KEYBOARD_CMDREG 0x64   // :Command Register(Read\Write)
 
-
+extern sid32 semKbd;
+extern pid32 pidKbd;
 extern unsigned char kblayout [128];  // { ... } Fill your layout yourself 
 

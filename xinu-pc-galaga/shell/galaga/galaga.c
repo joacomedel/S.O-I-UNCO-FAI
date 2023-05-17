@@ -5,7 +5,7 @@
 #include "boss.h"
 #include "gameover.h"
 #include "shoot.h"
-#include "xinu.h"
+#include <xinu.h>
 
 extern unsigned char tecla_actual;
 extern pid32 pid2;
