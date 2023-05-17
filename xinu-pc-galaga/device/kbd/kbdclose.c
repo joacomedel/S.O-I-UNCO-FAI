@@ -13,8 +13,7 @@ devcall	kbdclose (
 	  struct dentry	*devptr		/* Entry in device switch table	*/
 	)
 {
-	
-	if (pidKbd = getpid())
+	if (pidKbd == getpid())
 	{
 		signal(semKbd);
 	}

@@ -8,6 +8,7 @@
 #include <xinu.h>
 
 extern unsigned char tecla_actual;
+extern unsigned char teclas[3];
 extern pid32 pid2;
 extern pid32 pid3;
 typedef unsigned short u16;
@@ -38,6 +39,7 @@ typedef unsigned short u16;
 #define BUTTON_A	0x24
 #define BUTTON_B	0x25 
 #define BUTTON_SELECT	0x03
+#define BUTTON_A	0x24
 #define BUTTON_START	0x2c
 #define BUTTON_RIGHT	0x1f
 #define BUTTON_LEFT	0x1e	
@@ -45,7 +47,12 @@ typedef unsigned short u16;
 #define BUTTON_DOWN 	's'	
 #define BUTTON_R	'1'
 #define BUTTON_L	'2'
+
+//MACRO
 #define KEY_DOWN_NOW(key)  (tecla_actual == key)
+
+//Arreglo de teclas presionadas
+
 
 //variable definitions
 #define playerspeed 2
@@ -90,7 +97,8 @@ int curr_shot = 0;
 
 
 int galaga() {
-	vidas = 3;
+	send(pid2,0); //SE RESETEAN LOS TEXTOS DE PUNTAJE Y VIDAS
+
 	//easy enemy wave set setup
 	struct Enemy easyEnemies[9];
 	for (int a = 0; a < 9; a++) {
@@ -131,9 +139,12 @@ int galaga() {
 		for (int j = 0; j < 160; j++) {
 			setPixel(i, j, BLACK);
 		}
-	}	
+	}
+
+	vidas = 3;
 	while(1) {
 		//go back to title screen if select button is pressed
+
 		if (KEY_DOWN_NOW(BUTTON_SELECT)) {
 			//initialize();
 			galaga();
@@ -143,7 +154,7 @@ int galaga() {
 				send(pid3,0);
 		}
 		//player shots 
-		if (KEY_DOWN_NOW(BUTTON_A)) {
+		if (teclas[0]) {
 			if (shoots[curr_shot] == 0) {
 				shoots[curr_shot] = 136*240 + player.playerX+9; /* 24 widht player */
 				curr_shot++;
@@ -152,10 +163,10 @@ int galaga() {
 			};
 		}
 		//player movement input
-		if (KEY_DOWN_NOW(BUTTON_LEFT) && (player.playerX > 0)) {
+		if (teclas[1] && (player.playerX > 0)) {
 			player.playerX -= playerspeed;
 		}
-		if (KEY_DOWN_NOW(BUTTON_RIGHT) && (player.playerX <= 216)) {
+		if (teclas[2] && (player.playerX <= 216)) {
 			player.playerX += playerspeed;
 		}
 		if (KEY_DOWN_NOW(BUTTON_UP) && (player.playerY > 25)) {
@@ -164,6 +175,8 @@ int galaga() {
 		if (KEY_DOWN_NOW(BUTTON_DOWN) && (player.playerY <= 136)) {
 			player.playerY += playerspeed;
 		}
+
+
 		waitForVBlank();
 		sleepms(50);
 		//draw player
@@ -198,7 +211,7 @@ int galaga() {
 					drawRect((shoots[i] % 240), (shoots[i] / 240)+4, 5, 5, BLACK);
 					easyEnemies[j].enemyY = 0;
 					shoots[i] = 0;
-					send(pid2,0);
+					send(pid2,1);
 					//MATE A ALGUIEN AUMENTO PUNTAJE
 				}
 			}
@@ -281,7 +294,6 @@ int collision(u16 enemyX, u16 enemyY, u16 enemyWidth, u16 enemyHeight, u16 playe
 
 void endGame() {
 	vidas--;
-	printf("ENDGAME");
 	send(pid2,-1);
 	if (vidas == 0)
 	{
