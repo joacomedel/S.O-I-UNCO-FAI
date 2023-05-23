@@ -4,7 +4,7 @@
 #include "enemy.h"
 #include "boss.h"
 #include "gameover.h"
-#include "shoot.h"
+#include "imageShoot.h"
 #include <xinu.h>
 
 extern unsigned char tecla_actual;
@@ -67,11 +67,15 @@ typedef unsigned short u16;
 #define W_SCREEN 240
 #define H_SCREEN 160
 
+typedef struct TypeObject{
+	const u16 w;
+	const u16 h;
+	const u16 *image;
+} TypeObject;
 struct Object {
 	volatile u16 x;
 	volatile u16 y;
-	volatile u16 w;
-	volatile u16 h;
+	const TypeObject *typeObject;
 	volatile u16 speedX;
 	volatile u16 speedY;
 	volatile u16 state; // 0 no existe // 1 existe // 2 invl?
@@ -79,10 +83,11 @@ struct Object {
 void setPixel(int x, int y, u16 color);
 void drawRect(int x, int y, int width, int height, u16 color);
 void drawHollowRect(int x, int y, int width, int height, u16 color);
-void drawImage3(struct Object obj, const u16* image);
+void drawImage3(int x, int y, int width, int height, u16 color);
 void delay_galaga();
 void waitForVBlank();
 
+#define drawObject(o) drawImage3(o.x,o.y,o.typeObject->w, o.typeObject->h, o.typeObject->image)
 //helpers
 void initialize();
 void drawEnemies();
@@ -100,12 +105,13 @@ int galaga() {
 	send(pid2,0); //SE RESETEAN LOS TEXTOS DE PUNTAJE Y VIDAS
 	itero = 1;
 	//easy enemy wave set setup
+	TypeObject easyEnemy = {.w = 20 ,.h = 20,.image = enemy};
+	
 	struct Object easyEnemies[N_EASY];
 	for (int a = 0; a < N_EASY; a++) {
 		easyEnemies[a].x = (28*a);
 		easyEnemies[a].y = 0;
-		easyEnemies[a].w = 20;
-		easyEnemies[a].h = 20;
+		easyEnemies[a].typeObject = &easyEnemy;
 		easyEnemies[a].speedX = 0;
 		easyEnemies[a].speedY = enemyspeed;
 		easyEnemies[a].state = 1;
@@ -127,46 +133,40 @@ int galaga() {
 	hardEnemies[1].x = 240;
 	hardEnemies[4].x = 240;
 	hardEnemies[8].x = 240;*/
+	//player setup
+	struct Object player;
+	struct TypeObject playerType = {.w = 24 ,.h = 24,.image = playerImage};
+	player.state = 1;
+	player.x = 120;
+	player.y = 136;
+	player.typeObject = &playerType;
+	player.speedX = 0;
+	player.speedY = 0;
 	//shots setup 
 	struct Object shoots[10];
+	struct TypeObject shoot = {.w = 24 ,.h = 24,.image = imageShoot};
 	for (int32 i = 0; i < N_SHOOTS; i++)
 	{
 		shoots[i].x = 0;
 		shoots[i].y = 0;
 		shoots[i].speedX = 0;
 		shoots[i].speedY = -4;
-		shoots[i].w = 5;
-		shoots[i].h = 5;
+		shoots[i].typeObject = &shoot; 
 		shoots[i].state=0;
 	}
 	
-	//player setup
-	struct Object player;
-	player.state = 1;
-	player.x = 120;
-	player.y = 136;
-	player.h = 20;
-	player.y = 20;
-	player.speedX = 0;
-	player.speedY = 0;
 
 	
 
-	screen.x = 0;
-	screen.y = 0;
-	screen.w = W_SCREEN;
-	screen.h = H_SCREEN;
-	screen.speedX = 0;
-	screen.speedY = 0;
-	screen.state = 1;
+	
 	//initalize title screen
 	print_text_on_vga(10, 20, "GALAGA ");
-	drawImage3(screen, titlescreen);
+	drawImage3(0,0,W_SCREEN,H_SCREEN, titlescreen);
 	while(1) {
 		if (KEY_DOWN_NOW(BUTTON_START)) {
 			break;
 		}
-	}	
+	}
 	
 	//start black screen for drawing
 	
@@ -195,19 +195,21 @@ int update (struct Object *player ,struct Object easyEnemies[],struct Object sho
 				send(pid3,0);
 				itero = 0;
 		}
-
 		//player input
 		if (teclas[0] == 1)
 		{
-			currentShot = (currentShot +1)%N_SHOOTS;
+			currentShot ++;
+			if(currentShot == N_SHOOTS){
+					currentShot = 0;
+			}
+			int32 x = player->x + player->typeObject->w/2;
 			if (shoots[currentShot].state == 0)
 			{
 				/* code */
+				shoots[currentShot].x = x;
 				shoots[currentShot].state = 1;
-				shoots[currentShot].x = player->x;
-				shoots[currentShot].y = player->y;
+				shoots[currentShot].y = player->y-shoots[currentShot].typeObject->h;
 			}
-			
 		}
 		
 		if (teclas[1] == 1)
@@ -229,91 +231,27 @@ int update (struct Object *player ,struct Object easyEnemies[],struct Object sho
 				player->speedX = 0;
 			}
 		}
-		
-
-
 		waitForVBlank();
 		sleepms(50);
 		limpiarpantalla();
-		moveANDdraw(player,1,playerImage);
+		moveANDdraw(player,1);
 		//drawHollowRect(player.x - 1, player.y - 1, 26, 26, BLACK);
 		//drawHollowRect(player.x - 2, player.y - 2, 28, 28, BLACK);
-		//moveANDdraw(easyEnemies,N_EASY,enemy);
-		//seePlayerColission(player,easyEnemies,N_EASY);
-		//seeShootColission(easyEnemies,N_SHOOTS,shoots);
-		//moveANDdraw(shoots,N_SHOOTS,shoot);
-
-		
-
-		//draw player
-		/*
-		
-		//draw easy enemies with downward movement
-		for (int a = 0; a < 9; a++) {
-			// easyEnemies[a].enemyY += enemyspeed;
-			drawImage3(easyEnemies[a].enemyX, easyEnemies[a].enemyY, 20, 20, enemy);
-			if (collision(easyEnemies[a].enemyX, easyEnemies[a].enemyY, 20, 20, player.playerX, player.playerY)) {
-				endGame();
-				drawRect(easyEnemies[a].enemyX, easyEnemies[a].enemyY,  20, 20, BLACK);
-				easyEnemies[a].enemyY = 0;
-			}	
-			if (easyEnemies[a].enemyY >= 160) {
-				easyEnemies[a].enemyY = 0;
-			}		
-		}
-
-		//draw shots
-
-		
-		//draw hard enemies
-		for (int a = 0; a < 9; a++) {
-			hardEnemies[a].enemyY += enemyspeed;
-			drawImage3(hardEnemies[a].enemyX, hardEnemies[a].enemyY, 20, 20, enemy);
-			if (collision(hardEnemies[a].enemyX, hardEnemies[a].enemyY, 20, 20, player.playerX, player.playerY)) {
-				endGame();
-				hardEnemies[a].enemyY = 0;
-				drawRect(hardEnemies[a].enemyX, hardEnemies[a].enemyY,  20, 20, BLACK);
-			}	
-			if (hardEnemies[a].enemyY >= 228) {
-				hardEnemies[a].enemyY = 0;
-			}
-			if ((hardEnemies[a].enemyY >= 200) && (easyEnemies[a].enemyY <=45)) {
-				hardEnemies[a].enemyY = 160;
-			}	
-			//space enemies apart
-			if ((hardEnemies[a].enemyY >= 200) && (easyEnemies[a].enemyY <=45)) {
-				hardEnemies[a].enemyY = 160;
-			}		
-			if ((easyEnemies[a].enemyY >= 120) && (hardEnemies[a].enemyY >=170)) {
-				hardEnemies[a].enemyY = 160;
-			}							
-		}	*/
-		//draw fast enemy
-		/*drawImage3(fast.fastX, fast.fastY, 15, 15, boss);
-		drawHollowRect(fast.fastX - 1, fast.fastY - 1, 17, 17, BLACK);
-		drawHollowRect(fast.fastX - 2, fast.fastY - 2, 19, 19, BLACK);
-		if(collision(fast.fastX, fast.fastY, 15, 15, player.playerX, player.playerY)) {
-			endGame();
-			fast.fastY = 0;
-			drawRect(fast.fastX, fast.fastY,  20, 20, BLACK);
-		}		
-		if (fast.fastX >= 240) {
-			fast.fastX = 0;
-		}
-		if (fast.fastY >= 200) {
-			fast.fastY = player.playerY - 20;
-		}*/
+		moveANDdraw(easyEnemies,N_EASY);
+		seePlayerColission(player,easyEnemies,N_EASY);
+		moveANDdraw(shoots,N_SHOOTS);
+		seeShootColission(easyEnemies,N_SHOOTS,shoots);
 	}	
 	return 0;
 }
 
-int32 moveANDdraw(struct Object objs[] ,int32 count,const u16* image){
+int32 moveANDdraw(struct Object objs[],int32 count){
 	for (int32 i = 0; i < count; i++)
 	{
 		if(objs[i].state == 1){
 			objs[i].x += objs[i].speedX;
 			objs[i].y += objs[i].speedY;
-			drawImage3(objs[i],image);
+			drawObject(objs[i]);
 		}
 	}
 	return 0;
@@ -333,13 +271,14 @@ int32 seePlayerColission(struct Object *player, struct Object enemys[] , int32 c
 }
 int32 seeShootColission(struct Object enemys[] , int32 count , struct Object shoots[]){
 		for (int i = 0; i < N_SHOOTS; i++) {
-			
 			if (shoots[i].state == 1) {
 				shoots[i].y += shoots[i].speedX;
-				drawRect(shoots[i].x, shoots[i].y+4, 5, 5, BLACK);
-				drawImage3(shoots[i], shoot);
-				
-				for (int j = 0; j < 9; j++) {
+				if(shoots[i].y < 0){
+					shoots[i].state = 0;
+				}else{
+					drawRect(shoots[i].x, shoots[i].y+4, 5, 5, BLACK);
+					drawObject(shoots[i]);
+					for (int j = 0; j < 9; j++) {
 					// check hits of shoots
 					if (collision(shoots[i],enemys[j])){
 						drawRect(enemys[j].x, enemys[j].y,  20, 20, BLACK);
@@ -350,25 +289,26 @@ int32 seeShootColission(struct Object enemys[] , int32 count , struct Object sho
 						//MATE A ALGUIEN AUMENTO PUNTAJE
 					}
 				}
+				}	
 			}
 		}
 		return 0;
 }
 
 int32 collision(struct Object obj1, struct Object obj2) {
-	if (obj1.x > obj2.x + obj2.w)
+	if (obj1.x > obj2.x + obj2.typeObject->w)
 	{
 		return 0 ; 
 	}
-	if (obj1.x+obj1.w < obj2.x)
+	if (obj1.x+obj1.typeObject->w < obj2.x)
 	{
 		return 0 ; 
 	}
-	if (obj1.y > obj2.y + obj2.h)
+	if (obj1.y > obj2.y + obj2.typeObject->h)
 	{
 		return 0 ; 
 	}
-	if (obj1.y+obj1.h < obj2.y)
+	if (obj1.y+obj1.typeObject->h < obj2.y)
 	{
 		return 0 ; 
 	}
@@ -385,7 +325,7 @@ void endGame() {
 		//entre q creo el proceso 1 a cuando cree el proceso 3
 		//start Game Over State
 		while(1) {
-			drawImage3(screen ,gameover);
+			drawImage3(0,0,W_SCREEN,H_SCREEN, titlescreen);
 			drawHollowRect(0, 0, 240, 160, WHITE);
 			if (KEY_DOWN_NOW(BUTTON_ESC)) {
 				send(pid3,0);

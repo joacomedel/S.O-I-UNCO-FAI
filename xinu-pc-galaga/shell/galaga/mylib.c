@@ -15,7 +15,7 @@ struct Object {
 extern void setPixel(int x, int y, u16 color);
 void drawRect(int x, int y, int width, int height, u16 color);
 void drawHollowRect(int x, int y, int width, int height, u16 color);
-void drawImage3(struct Object obj, const u16* image);
+void drawImage3(int x, int y, int width, int height, const u16* image);
 // void delay();
 void waitForVBlank();
 
@@ -44,11 +44,11 @@ void drawHollowRect(int x, int y, int width, int height, u16 color) {
 	}
 }
 
-void drawImage3(struct Object obj, const u16* image) {
-	for (int i = 0; i < obj.w; i++) {
-		for (int j = 0; j < obj.h; j++) {
-			u16 color = *(image + i + (obj.w * j));
-			setPixel(obj.x + i, obj.y + j, color);
+void drawImage3(int x, int y, int width, int height, const u16* image) {
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			u16 color = *(image + i + (width * j));
+			setPixel(x + i, y + j, color);
 		}
 	}
 }
