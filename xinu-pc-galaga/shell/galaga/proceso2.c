@@ -1,8 +1,8 @@
 #include <xinu.h>
-
+    int32 vidas ;
 int32 proceso2(void){
+    vidas = 3;
     int32 msg;
-    int32 vidas = 3;
     int32 puntaje = 0;
     char cadena[30];
     while (1)

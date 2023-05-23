@@ -4,7 +4,15 @@
 #include "myLib.h"
 #include "sprites.h"
 // #include <string.h>
-
+struct Object {
+	volatile u16 x;
+	volatile u16 y;
+	volatile u16 w;
+	volatile u16 h;
+	volatile u16 speedX;
+	volatile u16 speedY;
+	volatile u16 state; // 0 no existe // 1 existe // 2 invl?
+};
 unsigned short *videoBuffer = (unsigned short *)0x6000000;
 
 //level design
@@ -64,11 +72,11 @@ void waitForVblank()
 * @param height height of the image
 * @param image Pointer to the first element of the image
 */
-void drawImage3(int x, int y, int width, int height, const u16* image) {
-	for (int i = 0; i < width; i++) {
-		for (int j = 0; j < height; j++) {
-			u16 color = *(image + i + (width * j));
-			setPixel(x + i, y + j, color);
+void drawImage3(struct Object obj, const u16* image) {
+	for (int i = 0; i < obj.w; i++) {
+		for (int j = 0; j < obj.h; j++) {
+			u16 color = *(image + i + (obj.w * j));
+			setPixel(obj.x + i, obj.y + j, color);
 		}
 	}
 }

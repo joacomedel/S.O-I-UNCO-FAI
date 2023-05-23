@@ -1,6 +1,9 @@
 {
     "files.associations": {
         "xinu.h": "c",
-        "keyboard.h": "c"
+        "keyboard.h": "c",
+        "random": "c",
+        "chrono": "c",
+        "algorithm": "c"
     }
 }
