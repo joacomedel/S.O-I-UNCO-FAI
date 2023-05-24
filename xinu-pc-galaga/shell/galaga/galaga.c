@@ -4,7 +4,7 @@
 #include "enemy.h"
 #include "boss.h"
 #include "gameover.h"
-#include "imageShoot.h"
+#include "shoot.h"
 #include <xinu.h>
 
 extern unsigned char tecla_actual;
@@ -72,18 +72,18 @@ typedef struct TypeObject{
 	const u16 h;
 	const u16 *image;
 } TypeObject;
-struct Object {
+typedef struct Object {
 	volatile u16 x;
 	volatile u16 y;
 	const TypeObject *typeObject;
-	volatile u16 speedX;
-	volatile u16 speedY;
-	volatile u16 state; // 0 no existe // 1 existe // 2 invl?
-};
+	volatile int16 speedX;
+	volatile int16 speedY;
+	volatile int16 state; // 0 no existe // 1 existe // 2 invl?
+} Object;
 void setPixel(int x, int y, u16 color);
 void drawRect(int x, int y, int width, int height, u16 color);
 void drawHollowRect(int x, int y, int width, int height, u16 color);
-void drawImage3(int x, int y, int width, int height, u16 color);
+void drawImage3(int x, int y, int width, int height, const u16* image);
 void delay_galaga();
 void waitForVBlank();
 
@@ -99,15 +99,13 @@ int collision(struct Object object1, struct Object object2);
 
 
 int32 itero;
-struct Object screen;
 
 int galaga() {
 	send(pid2,0); //SE RESETEAN LOS TEXTOS DE PUNTAJE Y VIDAS
 	itero = 1;
 	//easy enemy wave set setup
 	TypeObject easyEnemy = {.w = 20 ,.h = 20,.image = enemy};
-	
-	struct Object easyEnemies[N_EASY];
+	Object easyEnemies[N_EASY];
 	for (int a = 0; a < N_EASY; a++) {
 		easyEnemies[a].x = (28*a);
 		easyEnemies[a].y = 0;
@@ -134,8 +132,8 @@ int galaga() {
 	hardEnemies[4].x = 240;
 	hardEnemies[8].x = 240;*/
 	//player setup
-	struct Object player;
-	struct TypeObject playerType = {.w = 24 ,.h = 24,.image = playerImage};
+	Object player;
+	TypeObject playerType = {.w = 24 ,.h = 24,.image = playerImage};
 	player.state = 1;
 	player.x = 120;
 	player.y = 136;
@@ -143,8 +141,8 @@ int galaga() {
 	player.speedX = 0;
 	player.speedY = 0;
 	//shots setup 
-	struct Object shoots[10];
-	struct TypeObject shoot = {.w = 24 ,.h = 24,.image = imageShoot};
+	struct Object shoots[N_SHOOTS];
+	TypeObject shoot = {.w = 5 ,.h = 5,.image = imageShoot};
 	for (int32 i = 0; i < N_SHOOTS; i++)
 	{
 		shoots[i].x = 0;
@@ -169,7 +167,7 @@ int galaga() {
 	}
 	
 	//start black screen for drawing
-	
+	limpiarpantalla();
 	
 	update(&player,easyEnemies,shoots);
 	
@@ -233,7 +231,6 @@ int update (struct Object *player ,struct Object easyEnemies[],struct Object sho
 		}
 		waitForVBlank();
 		sleepms(50);
-		limpiarpantalla();
 		moveANDdraw(player,1);
 		//drawHollowRect(player.x - 1, player.y - 1, 26, 26, BLACK);
 		//drawHollowRect(player.x - 2, player.y - 2, 28, 28, BLACK);
@@ -245,12 +242,39 @@ int update (struct Object *player ,struct Object easyEnemies[],struct Object sho
 	return 0;
 }
 
+/*int32 drawAndClean(struct Object *obj){
+	if(obj.speedX != 0){
+		drawRect(obj.x - obj.speedX,obj.y,obj.speedX-1,obj.typeObject->h,BLACK);
+	}
+	if(obj.speedY != 0){
+		drawRect(obj.x,obj.y - obj.speedY,obj.typeObject->w,obj.speedY-1,BLACK);
+	}
+	drawObject(obj);
+}*/
 int32 moveANDdraw(struct Object objs[],int32 count){
 	for (int32 i = 0; i < count; i++)
 	{
 		if(objs[i].state == 1){
 			objs[i].x += objs[i].speedX;
 			objs[i].y += objs[i].speedY;
+			if(objs[i].speedX != 0){
+				if (objs[i].speedX > 0)
+				{
+					drawRect(objs[i].x - objs[i].speedX,objs[i].y,objs[i].speedX-1,objs[i].typeObject->h,BLACK);
+				}else{
+					drawRect(objs[i].x - objs[i].speedX,objs[i].y,(-1*objs[i].speedX)-1,objs[i].typeObject->h,BLACK);
+				}
+				
+			}
+			if(objs[i].speedY != 0){
+				if (objs[i].speedY > 0)
+				{
+					drawRect(objs[i].x,objs[i].y - objs[i].speedY,objs[i].typeObject->w,objs[i].speedY-1,BLACK);/* code */
+				}else{
+					drawRect(objs[i].x,objs[i].y - objs[i].speedY,objs[i].typeObject->w,(-1*objs[i].speedY)-1,BLACK);
+				}
+				
+			}
 			drawObject(objs[i]);
 		}
 	}
@@ -260,7 +284,6 @@ int32 seePlayerColission(struct Object *player, struct Object enemys[] , int32 c
 	for (int a = 0; a < count; a++) {
 			if (collision(player[0],enemys[a])) {
 				endGame();
-				drawRect(enemys[a].x, enemys[a].y,  20, 20, BLACK);
 				enemys[a].y = 0;
 			}	
 			if (enemys[a].y >= 160) {
@@ -276,13 +299,12 @@ int32 seeShootColission(struct Object enemys[] , int32 count , struct Object sho
 				if(shoots[i].y < 0){
 					shoots[i].state = 0;
 				}else{
-					drawRect(shoots[i].x, shoots[i].y+4, 5, 5, BLACK);
-					drawObject(shoots[i]);
+					//drawRect(shoots[i].x, shoots[i].y+4, 5, 5, BLACK);
 					for (int j = 0; j < 9; j++) {
 					// check hits of shoots
 					if (collision(shoots[i],enemys[j])){
-						drawRect(enemys[j].x, enemys[j].y,  20, 20, BLACK);
-						drawRect(shoots[i].x, shoots[i].x+4, 5, 5, BLACK);
+						//drawRect(enemys[j].x, enemys[j].y,  20, 20, BLACK);
+						//drawRect(shoots[i].x, shoots[i].x+4, 5, 5, BLACK);
 						enemys[j].y = 0;
 						shoots[i].state = 0;
 						send(pid2,1);

@@ -3,15 +3,6 @@
 typedef unsigned short u16;
 // u16 *videoBuffer = (u16 *)0x6000000;
 // #define scanlinecounter *(volatile u16 *)0x4000006
-struct Object {
-	volatile u16 x;
-	volatile u16 y;
-	volatile u16 w;
-	volatile u16 h;
-	volatile u16 speedX;
-	volatile u16 speedY;
-	volatile u16 state; // 0 no existe // 1 existe // 2 invl?
-};
 extern void setPixel(int x, int y, u16 color);
 void drawRect(int x, int y, int width, int height, u16 color);
 void drawHollowRect(int x, int y, int width, int height, u16 color);
