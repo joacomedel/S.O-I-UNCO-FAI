@@ -20,3 +20,55 @@ s = unmap(addr, len) Unmap a file
 7ffe93ee8000-7ffe93f09000 rw-p 00000000 00:00 0                          [stack]
 7ffe93f3e000-7ffe93f42000 r--p 00000000 00:00 0                          [vvar]
 7ffe93f42000-7ffe93f44000 r-xp 00000000 00:00 0                          [vdso]
+
+
+2)
+usamem 
+real	0m24,381s
+user	0m24,014s
+sys	0m0,220s
+ 
+ usamem2
+real	0m5,708s
+user	0m5,578s
+sys	0m0,104s
+
+usamem3 
+
+real	0m9,113s
+user	0m8,872s
+sys	0m0,157s
+
+ Performance counter stats for './usamem':
+
+            90.350      dTLB-store-misses                                           
+     3.868.381.895      cache-misses                                                
+
+      23,648808640 seconds time elapsed
+
+      23,263598000 seconds user
+       0,256304000 seconds sys
+
+ Performance counter stats for './usamem2':
+
+            15.468      dTLB-store-misses                                           
+        50.120.478      cache-misses                                                
+
+       5,515579570 seconds time elapsed
+
+       5,347073000 seconds user
+       0,148085000 seconds sys
+
+Performance counter stats for './usamem3':
+
+            85.885      dTLB-store-misses                                           
+     1.006.394.499      cache-misses                                                
+
+       8,940557330 seconds time elapsed
+
+       8,576289000 seconds user
+       0,159930000 seconds sys
+
+
+El peor rendimiento lo tiene la version 1 , y es la q mas fallos de cache tiene 
+I

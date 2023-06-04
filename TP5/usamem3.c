@@ -9,7 +9,7 @@ main()
 {
     int i, j, k;
     int c = getpid();
-    printf("pid : %i",c);
+    printf("pid : %i", c);
     printf("i: %0x", &i);
     printf("j: %0x", &j);
     pp = malloc(N * BSIZE);
@@ -19,11 +19,14 @@ main()
         exit(1);
     }
     /* RECORREMOS y modificamos todo el segmento solicitado */
-    for (j = 0; j < BSIZE; j++)
+    for (k = 0; k < BSIZE / SMALL; k++)
     {
         for (i = 0; i < N; i++)
         {
-            *(pp + i * BSIZE + j) = 2; // pp[i][j] = 2;
+            for (j = 0; j < SMALL; j++)
+            {
+                *(pp + i * BSIZE + (SMALL * k + j)) = 2; // pp[i][SMALL*k+j] = 2;
+            }
         }
     }
     /* RECORREMOS y VERIFICAMOS QUE HEMOS MODIFICADO todo el segmento solicitado */

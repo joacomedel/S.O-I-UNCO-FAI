@@ -9,7 +9,7 @@ main()
 {
     int i, j, k;
     int c = getpid();
-    printf("pid : %i",c);
+    printf("pid : %i", c);
     printf("i: %0x", &i);
     printf("j: %0x", &j);
     pp = malloc(N * BSIZE);
@@ -19,9 +19,9 @@ main()
         exit(1);
     }
     /* RECORREMOS y modificamos todo el segmento solicitado */
-    for (j = 0; j < BSIZE; j++)
+    for (i = 0; i < N; i++)
     {
-        for (i = 0; i < N; i++)
+        for (j = 0; j < BSIZE; j++)
         {
             *(pp + i * BSIZE + j) = 2; // pp[i][j] = 2;
         }
