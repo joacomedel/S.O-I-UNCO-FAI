@@ -1,0 +1,22 @@
+1a) 
+98304000
+1b)400 segundos 
+1c)
+pp esta en el segmento de datos 
+
+i,j,k en el stack 
+
+1d)
+s = brk(addr) Change data segment size
+a = mmap(addr, len, prot, flags, fd, offset) Map a file in
+s = unmap(addr, len) Unmap a file
+
+
+
+
+1)f 
+00f87000-00fa9000 rw-p 00000000 00:00 0                                  [heap]
+7f935a167000-7f9394ae8000 rw-p 00000000 00:00 0 
+7ffe93ee8000-7ffe93f09000 rw-p 00000000 00:00 0                          [stack]
+7ffe93f3e000-7ffe93f42000 r--p 00000000 00:00 0                          [vvar]
+7ffe93f42000-7ffe93f44000 r-xp 00000000 00:00 0                          [vdso]
