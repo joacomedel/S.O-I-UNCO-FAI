@@ -1,5 +1,5 @@
 #include <xinu.h>
-    int32 vidas ;
+    int32 vidas;
 int32 proceso2(void){
     vidas = 3;
     int32 msg;
@@ -15,10 +15,10 @@ int32 proceso2(void){
         case -1:vidas--;break;
         case 0: vidas =3 ; puntaje = 0;break;
         case 1: puntaje++;break;
-        
         default:
             break;
         }
+        printf("%d",puntaje);
     }
     
 

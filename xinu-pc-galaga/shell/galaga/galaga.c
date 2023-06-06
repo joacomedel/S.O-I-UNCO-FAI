@@ -172,7 +172,6 @@ int galaga() {
 	limpiarpantalla();
 	
 	update(&player,easyEnemies,shoots);
-	
 	return 0;
 }
 int limpiarpantalla(){
@@ -293,13 +292,14 @@ int32 seeShootColission(struct Object enemys[] , int32 count , struct Object sho
 			if (shoots[i].state == 1) {
 				if(shoots[i].y < 0){
 					shoots[i].state = 0;
+					drawRect(shoots[i].x, shoots[i].y, 5, 5, BLACK);
 				}else{
 					drawRect(shoots[i].x, shoots[i].y+4, 5, 5, BLACK);
 					for (int j = 0; j < 9; j++) {
 					// check hits of shoots
 					if (collision(shoots[i],enemys[j])){
 						drawRect(enemys[j].x, enemys[j].y,  20, 20, BLACK);
-						drawRect(shoots[i].x, shoots[i].x+4, 5, 5, BLACK);
+						drawRect(shoots[i].x, shoots[i].y, 5, 5, BLACK);
 						enemys[j].y = 0;
 						shoots[i].state = 0;
 						send(pid2,1);
