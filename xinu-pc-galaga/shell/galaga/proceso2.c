@@ -1,9 +1,10 @@
 #include <xinu.h>
     int32 vidas;
+    int32 puntaje;
 int32 proceso2(void){
     vidas = 3;
     int32 msg;
-    int32 puntaje = 0;
+    puntaje = 0;
     char cadena[30];
     while (1)
     {
@@ -18,7 +19,6 @@ int32 proceso2(void){
         default:
             break;
         }
-        printf("%d",puntaje);
     }
     
 

@@ -10,19 +10,17 @@ unsigned char teclas[3];
 #define BUTTON_RIGHT_REL	0x9f
 #define BUTTON_LEFT_REL	0x9e
 extern sid32 semCerro;
+int32 inputAv;
 int32 proceso4 (void) {
+    inputAv = 1;
     teclas[0] = 0;
     teclas[1] = 0;
     teclas[2] = 0;
-    int32 itero=1;
+    
     open(KEYBOARD,0,0);
-    while (itero)
+    while (inputAv)
     {
         tecla_actual = getc(KEYBOARD);
-        if (tecla_actual == 0x01)
-        {
-            itero = 0;
-        }
         char cadena[20];
         sprintf(cadena , "%x" ,tecla_actual);
         print_text_on_vga(10, 300, cadena);
@@ -37,6 +35,7 @@ int32 proceso4 (void) {
         }
         
     }
+    printf("termino input");
     close(KEYBOARD);
     printf("cerro teclado");
     signal(semCerro);

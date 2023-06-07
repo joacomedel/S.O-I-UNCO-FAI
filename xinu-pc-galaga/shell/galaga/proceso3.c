@@ -22,6 +22,7 @@ shellcmd proceso3(){
     
 
     receive(); //viene de proceso 1
+    printf("PROCESO 3 MATA");
     kill(pid1);
     kill(pid2);
     wait(semCerro); //Tengo q usar semaforos porque se me pueden
