@@ -5,6 +5,7 @@
         "imageshoot.h": "c",
         "gameover.h": "c",
         "boss.h": "c",
-        "enemy.h": "c"
+        "enemy.h": "c",
+        "atomic": "c"
     }
 }
